@@ -1,3 +1,5 @@
+const { JSDOM } = require("jsdom");
+
 function normalizeURL(url) {
     const urlObject = new URL(url);
     //using methods from created URL object to access parts of url
@@ -10,6 +12,13 @@ function normalizeURL(url) {
     return output;
 }
 
+function getURLsFromHTML(htmlBody, baseURL){
+    const dom = new JSDOM(htmlBody);
+    linkArray = dom.window.document.querySelectorAll('a');
+    return linkArray
+}
+
 module.exports = {
-    normalizeURL
+    normalizeURL,
+    getURLsFromHTML,
 }

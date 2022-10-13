@@ -1,6 +1,6 @@
 function normalizeURL(url) {
-    const myURL = url.parse(url)
-    return myURL
+    let urlObject = new URL(url);
+    console.log(urlObject)
 }
 
 module.exports = {

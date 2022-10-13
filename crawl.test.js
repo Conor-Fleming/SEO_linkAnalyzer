@@ -2,21 +2,31 @@ const { normalizeURL } = require('./crawl.js')
 const { test, expect } = require('@jest/globals')
 
 test('takes input URL and normalizes', () => {
-    expect(normalizeURL("https://test.com/dev").toBe("test.com/dev"));
+    input = "https://test.com/dev"
+    result = normalizeURL(input)
+    expect(result).toEqual("test.com/dev");
 });
 
 test('takes input URL and normalizes', () => {
-    expect(normalizeURL("https://TEST.com/dev").toBe("test.com/dev"));
+    input = "https://TEST.com/dev"
+    result = normalizeURL(input)
+    expect(result).toEqual("test.com/dev");
 });
 
 test('takes input URL and normalizes', () => {
-    expect(normalizeURL("http://test.com/dev").toBe("test.com/dev"));
+    input = "http://test.com/dev"
+    result = normalizeURL(input)
+    expect(result).toEqual("test.com/dev");
 });
 
 test('takes input URL and normalizes', () => {
-    expect(normalizeURL("test.com/dev").toBe("test.com/dev"));
+    input = "test.com/dev"
+    result = normalizeURL(input)
+    expect(result).toEqual("test.com/dev");
 });
 
 test('takes input URL and normalizes', () => {
-    expect(normalizeURL("https://Test.com/dev").toBe("test.com/dev"));
+    input = "https://Test.com/dev"
+    result = normalizeURL(input)
+    expect(result).toEqual("test.com/dev");
 });

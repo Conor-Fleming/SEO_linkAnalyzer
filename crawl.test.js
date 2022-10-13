@@ -14,13 +14,13 @@ test('takes input URL and normalizes', () => {
 });
 
 test('takes input URL and normalizes', () => {
-    input = "http://test.com/dev"
+    input = "http://test.com/dev/"
     result = normalizeURL(input)
     expect(result).toEqual("test.com/dev");
 });
 
 test('takes input URL and normalizes', () => {
-    input = "test.com/dev"
+    input = "https://test.COM/dev"
     result = normalizeURL(input)
     expect(result).toEqual("test.com/dev");
 });

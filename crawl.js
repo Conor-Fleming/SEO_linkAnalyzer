@@ -14,7 +14,7 @@ function normalizeURL(url) {
 
 function getURLsFromHTML(htmlBody, baseURL){
     const dom = new JSDOM(htmlBody);
-    links= dom.window.document.querySelectorAll('a');
+    links = dom.window.document.querySelectorAll('a');
     const urls = []
     for (const link of links){
         if (link.href.slice(0,1) == "/") {
@@ -23,7 +23,6 @@ function getURLsFromHTML(htmlBody, baseURL){
             urls.push(link.href)
         }
     }
-    console.log(urls)
     return urls
 }
 

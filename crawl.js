@@ -26,7 +26,19 @@ function getURLsFromHTML(htmlBody, baseURL){
     return urls
 }
 
+function crawlPage(baseURL) {
+    fetch(baseURL).then(function (response) {
+        return response.text();
+    }).then(function (html) {
+        console.log(html);
+    }).catch(function (err) {
+        console.warn("Something went wrong", err);
+    });
+}
+
 module.exports = {
     normalizeURL,
     getURLsFromHTML,
+    crawlPage,
 }
+

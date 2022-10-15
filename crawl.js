@@ -14,8 +14,17 @@ function normalizeURL(url) {
 
 function getURLsFromHTML(htmlBody, baseURL){
     const dom = new JSDOM(htmlBody);
-    linkArray = dom.window.document.querySelectorAll('a');
-    return linkArray
+    links= dom.window.document.querySelectorAll('a');
+    const urls = []
+    for (const link of links){
+        if (link.href.slice(0,1) == "/") {
+            urls.push(baseURL + link.href)
+        } else {
+            urls.push(link.href)
+        }
+    }
+    console.log(urls)
+    return urls
 }
 
 module.exports = {

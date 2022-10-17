@@ -1,4 +1,5 @@
 const { JSDOM } = require("jsdom");
+const { fetch } = require("node-fetch");
 
 function normalizeURL(url) {
     const urlObject = new URL(url);
@@ -26,14 +27,17 @@ function getURLsFromHTML(htmlBody, baseURL){
     return urls
 }
 
-function crawlPage(baseURL) {
-    fetch(baseURL).then(function (response) {
-        return response.text();
-    }).then(function (html) {
-        console.log(html);
-    }).catch(function (err) {
+async function crawlPage(baseURL) {
+    try{
+        let resp = await fetch(baseURL)
+        if (resp.status > 399){
+            console.log(`Error response status code recieved: ${resp.statusText}`)
+            return
+        }
+    } catch (err){
         console.warn("Something went wrong", err);
-    });
+    }
+    console.log(resp)
 }
 
 module.exports = {

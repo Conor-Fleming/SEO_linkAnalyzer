@@ -26,7 +26,16 @@ function getURLsFromHTML(htmlBody, baseURL){
     return urls
 }
 
-async function crawlPage(currentURL) {
+async function crawlPage(baseURL, currentURL, pages) {
+  if (getDomain(baseURL) !== getDomain(currentURL)){
+    return pages
+  }
+
+  currentURL = normalizeURL(currentURL)
+  if (pages[currentURL] !== null){
+    pages[currentURL] = pages[currentURL]++
+    return pages
+  }
   try{
     const resp = await fetch(currentURL)
     if (resp.status > 399) {
@@ -38,11 +47,17 @@ async function crawlPage(currentURL) {
       console.log(`non html response: ${contentType}`)
       return
     }
-    console.log(await resp.text())
+    console.log(`crawling: ${currentURL}`)
+    let links = getURLsFromHTML(await resp.body.text())
+    console.log(links)
   } catch (err) {
     console.log(err.message)
-
   }
+}
+
+function getDomain(url) {
+  let domain = (new URL(url))
+  return domain.hostname
 }
 
 module.exports = {

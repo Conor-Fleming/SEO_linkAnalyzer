@@ -1,5 +1,4 @@
 const { JSDOM } = require("jsdom");
-const { fetch } = require("node-fetch");
 
 function normalizeURL(url) {
     const urlObject = new URL(url);
@@ -27,17 +26,23 @@ function getURLsFromHTML(htmlBody, baseURL){
     return urls
 }
 
-async function crawlPage(baseURL) {
-    try{
-        let resp = await fetch(baseURL)
-        if (resp.status > 399){
-            console.log(`Error response status code recieved: ${resp.statusText}`)
-            return
-        }
-    } catch (err){
-        console.warn("Something went wrong", err);
+async function crawlPage(currentURL) {
+  try{
+    const resp = await fetch(currentURL)
+    if (resp.status > 399) {
+      console.log(`Got error: ${resp.status}`)
+      return
     }
-    console.log(resp)
+    const contentType = resp.headers.get('content-type')
+    if (contentType.includes('text/html')){
+      console.log(`non html response: ${contentType}`)
+      return
+    }
+    console.log(await resp.text)
+  } catch (err) {
+    console.log(err.message)
+
+  }
 }
 
 module.exports = {

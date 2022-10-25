@@ -7,7 +7,9 @@ async function main() {
         return
     }
     console.log("Crawling Site...")
+
     await crawlPage(args[0])
+
 }
 
 main()

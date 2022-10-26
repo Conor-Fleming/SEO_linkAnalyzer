@@ -32,24 +32,34 @@ async function crawlPage(baseURL, currentURL, pages) {
   }
 
   currentURL = normalizeURL(currentURL)
-  if (pages[currentURL] !== null){
-    pages[currentURL] = pages[currentURL]++
+
+  if (pages[currentURL] > 0) {
+    pages[currentURL]++
     return pages
   }
+
   try{
     const resp = await fetch(currentURL)
     if (resp.status > 399) {
       console.log(`Got error: ${resp.status}`)
       return
     }
+
     const contentType = resp.headers.get('content-type')
     if (contentType.includes('text/html') !== true){
       console.log(`non html response: ${contentType}`)
       return
     }
+
     console.log(`crawling: ${currentURL}`)
-    let links = getURLsFromHTML(await resp.body.text())
-    console.log(links)
+    let links = getURLsFromHTML(await resp.body.text(), baseURL)
+
+    for (link in links) {
+      crawlPage(baseURL, link, pages)
+    }
+
+    return pages
+
   } catch (err) {
     console.log(err.message)
   }

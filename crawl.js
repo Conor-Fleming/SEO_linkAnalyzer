@@ -29,21 +29,20 @@ function getURLsFromHTML(htmlBody, baseURL){
 async function crawlPage(baseURL, currentURL, pages) {
   const currUrlObject = new URL(currentURL)
   const baseUrlObject = new URL(baseURL)
-  if (currUrlObject !== baseUrlObject){
+  if (currUrlObject.hostname !== baseUrlObject.hostname){
     return pages
   }
 
   //normalize func is stripping the 'https://' and as a result the fetch method doesnt like it
-  currentURL = normalizeURL(currentURL)
+  currentNormalized = normalizeURL(currentURL)
 
-  if (pages[currentURL] > 0) {
-    pages[currentURL]++
+  if (pages[currentNormalized] > 0) {
+    pages[currentNormalized]++
     return pages
   }
-  pages[currentURL] = 1
+  pages[currentNormalized] = 1
 
-  //dont know why i need this yet
-  currentURL = "https://" + currentURL
+  let htmlBody = ''
   try{
     const resp = await fetch(currentURL)
     if (resp.status > 399) {
@@ -56,21 +55,18 @@ async function crawlPage(baseURL, currentURL, pages) {
       console.log(`non html response: ${contentType}`)
       return pages
     }
-    console.log(`crawling: ${currentURL}`)
-    //console.log(await resp.text())
-    var urlsToCrawl = getURLsFromHTML(await resp.text())
-
-    for (link in urlsToCrawl) {
-      pages = await crawlPage(baseURL, link, pages)
-    }
-
+    htmlBody = await resp.text()
   } catch (err) {
     console.log(err.message)
-    console.log(err)
   }
 
-  //call getURLs func and recursivley get urls and update pages
-  
+   console.log(`crawling: ${currentURL}`)
+    //console.log(await resp.text())
+    var urlsToCrawl = getURLsFromHTML(htmlBody, baseURL)
+
+    for (link of urlsToCrawl) {
+      pages = await crawlPage(baseURL, link, pages)
+    }
   
   return pages
 }

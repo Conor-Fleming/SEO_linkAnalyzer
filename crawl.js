@@ -27,7 +27,9 @@ function getURLsFromHTML(htmlBody, baseURL){
 }
 
 async function crawlPage(baseURL, currentURL, pages) {
-  if (getDomain(baseURL) !== getDomain(currentURL)){
+  const currUrlObject = new URL(currentURL)
+  const baseUrlObject = new URL(baseURL)
+  if (currUrlObject !== baseUrlObject){
     return pages
   }
 
@@ -55,20 +57,22 @@ async function crawlPage(baseURL, currentURL, pages) {
       return pages
     }
     console.log(`crawling: ${currentURL}`)
-    console.log(await resp.text())
+    //console.log(await resp.text())
+    var urlsToCrawl = getURLsFromHTML(await resp.text())
+
+    for (link in urlsToCrawl) {
+      pages = await crawlPage(baseURL, link, pages)
+    }
 
   } catch (err) {
     console.log(err.message)
+    console.log(err)
   }
-  
+
   //call getURLs func and recursivley get urls and update pages
   
+  
   return pages
-}
-
-function getDomain(url) {
-  let domain = (new URL(url))
-  return domain.hostname
 }
 
 module.exports = {

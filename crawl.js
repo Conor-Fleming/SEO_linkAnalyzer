@@ -31,38 +31,39 @@ async function crawlPage(baseURL, currentURL, pages) {
     return pages
   }
 
+  //normalize func is stripping the 'https://' and as a result the fetch method doesnt like it
   currentURL = normalizeURL(currentURL)
 
   if (pages[currentURL] > 0) {
     pages[currentURL]++
     return pages
   }
+  pages[currentURL] = 1
 
+  //dont know why i need this yet
+  currentURL = "https://" + currentURL
   try{
     const resp = await fetch(currentURL)
     if (resp.status > 399) {
       console.log(`Got error: ${resp.status}`)
-      return
+      return pages
     }
-
+    
     const contentType = resp.headers.get('content-type')
     if (contentType.includes('text/html') !== true){
       console.log(`non html response: ${contentType}`)
-      return
+      return pages
     }
-
     console.log(`crawling: ${currentURL}`)
-    let links = getURLsFromHTML(await resp.body.text(), baseURL)
-
-    for (link in links) {
-      crawlPage(baseURL, link, pages)
-    }
-
-    return pages
+    console.log(await resp.text())
 
   } catch (err) {
     console.log(err.message)
   }
+  
+  //call getURLs func and recursivley get urls and update pages
+  
+  return pages
 }
 
 function getDomain(url) {

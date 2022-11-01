@@ -54,3 +54,18 @@ test('ensure relative to absolute 1', () => {
     result = getURLsFromHTML(input, base)
     expect(result[0]).toEqual(expected)
 });
+
+test('test sort func 1', () => {
+    input = {"testlink1": 50, "testlink2": 1, "testlink3": 3, "testlink4": 29}
+    expected = [["testlink1", 50], ["testlink4", 29], ["testlink3", 3], ["testlink2", 1]]
+});
+
+test('test sort func 2', () => {
+    input = {"testlink1": 1, "testlink2": 1, "testlink3": 3, "testlink4": 1}
+    expected = [["testlink3", 3], ["testlink1", 1], ["testlink2", 1], ["testlink", 1]]
+});
+
+test('test sort func 3', () => {
+    input = {"testlink1": 0, "testlink2": 0, "testlink3": 3, "testlink4": 11}
+    expected = [["testlink4", 11], ["testlink3", 3], ["testlink1", 0], ["testlink2", 0]]
+});

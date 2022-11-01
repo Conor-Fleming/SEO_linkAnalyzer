@@ -21,11 +21,11 @@ function getURLsFromHTML(htmlBody, baseURL){
           try{
             urls.push(new URL(baseURL + link.href))
           } catch(err) {
-            console.log(err.message)
+            console.log(err.message, link.href)
           }
         } else {
           try {
-            urls.push(new URL(link.href))
+            urls.push(new URL(link.href, baseURL))
           } catch (err) {
             console.log(err.message, "here")
           }   
@@ -35,7 +35,7 @@ function getURLsFromHTML(htmlBody, baseURL){
 }
 
 async function crawlPage(baseURL, currentURL, pages) {
-  const currUrlObject = new URL(currentURL)
+  const currUrlObject = new URL(currentURL, baseURL)
   const baseUrlObject = new URL(baseURL)
   if (currUrlObject.hostname !== baseUrlObject.hostname){
     return pages

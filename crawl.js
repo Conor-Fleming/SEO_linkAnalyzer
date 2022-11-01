@@ -17,10 +17,18 @@ function getURLsFromHTML(htmlBody, baseURL){
     links = dom.window.document.querySelectorAll('a');
     const urls = []
     for (const link of links){
-        if (link.href.slice(0,1) == "/") {
-            urls.push(baseURL + link.href)
+        if (link.href.slice(0,1) === "/") {
+          try{
+            urls.push(new URL(baseURL + link.href))
+          } catch(err) {
+            console.log(err.message)
+          }
         } else {
-            urls.push(link.href)
+          try {
+            urls.push(new URL(link.href))
+          } catch (err) {
+            console.log(err.message, "here")
+          }   
         }
     }
     return urls
@@ -60,7 +68,7 @@ async function crawlPage(baseURL, currentURL, pages) {
     console.log(err.message)
   }
 
-   console.log(`crawling: ${currentURL}`)
+    console.log(`crawling: ${currentURL}`)
     //console.log(await resp.text())
     var urlsToCrawl = getURLsFromHTML(htmlBody, baseURL)
 

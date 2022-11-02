@@ -1,4 +1,5 @@
 const { crawlPage } = require('./crawl.js')
+const { printReport } = require('./report.js')
 
 async function main() {
     const args = process.argv.slice(2)
@@ -10,7 +11,7 @@ async function main() {
     var pages = {}
 
     pages = await crawlPage(args[0], args[0], pages)
-    console.log(pages)
+    printReport(pages)
 }
 
 main()
